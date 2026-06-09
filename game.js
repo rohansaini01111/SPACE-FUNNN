@@ -241,11 +241,10 @@ document.addEventListener("keydown", (e) => {
 
 });
 
+gameLoop();
+
 function drawScore() {
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + score, 20, 30);
 }
-
-gameLoop();
-
