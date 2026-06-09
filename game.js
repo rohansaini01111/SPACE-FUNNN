@@ -58,6 +58,7 @@ function drawGame() {
   drawOrbit();
   drawShip();
   drawAsteroids();
+  drawScore();
 }
 
 
@@ -137,9 +138,22 @@ function spawnAsteroid() {
 function updateAsteroids() {
   if (Math.random() < 0.02) spawnAsteroid();
 
-  asteroids.forEach(ast => {
+  asteroids.forEach((ast, index) => {
     ast.x += ast.vx * ast.speed;
     ast.y += ast.vy * ast.speed;
+
+    // 🎯 अगर asteroid center cross कर गया (missed)
+    let dx = ast.x - canvas.width / 2;
+    let dy = ast.y - canvas.height / 2;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 20) {
+      // 💥 remove asteroid
+      asteroids.splice(index, 1);
+
+      // 🔥 increase score
+      score++;
+    }
   });
 }
 
@@ -219,8 +233,10 @@ document.addEventListener("keydown", (e) => {
 
 });
 
+function drawScore() {
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText("Score: " + score, 20, 30);
+}
 
-// ===============================
-// 🚀 START
-// ===============================
 gameLoop();
