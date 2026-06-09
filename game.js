@@ -161,7 +161,8 @@ function updateAsteroids() {
     // 🔥 अगर asteroid center cross कर गया (planet ke pass)
     if (dist < 30) {
       asteroids.splice(i, 1); // remove
-      score++; // 💥 increase score
+      score++;
+      animateScore();
     }
   }
 }
@@ -192,6 +193,7 @@ function checkCollisions() {
     if (distC < 40) {
       asteroids.splice(i, 1);
       score++; // 💥 SCORE
+      animateScore();
       continue;
     }
 
@@ -234,6 +236,17 @@ function restartGame() {
   document.getElementById("crashPopup").classList.add("hidden");
 
   requestAnimationFrame(gameLoop);
+}
+
+function animateScore() {
+  let el = document.getElementById("scoreUI");
+
+  el.style.transform = "scale(1.3)";
+  el.style.transition = "0.2s";
+
+  setTimeout(() => {
+    el.style.transform = "scale(1)";
+  }, 200);
 }
 
 
