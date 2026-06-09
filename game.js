@@ -40,6 +40,8 @@ function gameLoop() {
 // 🔧 UPDATE (LOGIC)
 // ===============================
 function updateGame() {
+  console.log("updating..."); // 🔍
+
   updateShip();
   updateAsteroids();
   checkCollisions();
@@ -54,14 +56,16 @@ function drawOrbit() {
 }
 
 function drawGame() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  console.log("drawing frame"); // 🔥 YAHI
 
-  drawPlanet();    // 🔵 center
-  drawOrbit();     // ⚪ circle
-  drawShip();      // 🚀 moving
-  drawAsteroids(); // ☄️
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  drawPlanet();
+  drawOrbit();
+  drawShip();
+  drawAsteroids();
 }
-
 // ===============================
 // 🚀 SHIP LOGIC
 // ===============================
@@ -72,12 +76,6 @@ function updateShip() {
   ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
 }
 
-function drawShip() {
-  ctx.beginPath();
-  ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "#00f0ff";
-  ctx.fill();
-}
 
 // 🚀 SHIP DRAW FUNCTION ke paas
 function drawShip() {
