@@ -44,6 +44,8 @@ function updateGame() {
   updateShip();
   updateAsteroids();
   checkCollisions();
+
+   document.getElementById("scoreUI").innerText = "Score: " + score;
 }
 
 
