@@ -1,204 +1,172 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+// ===============================
+// 🚀 GLOBAL STATE
+// ===============================
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
+let gameRunning = true;
+let score = 0;
 
-const planet = {
-  x: centerX,
-  y: centerY,
-  radius: 60
-};
-
-const orbit = {
-  inner: 120,
-  outer: 180
-};
-
-let angle = 0;
-let currentOrbit = "outer";
-let targetOrbit = orbit.outer;
-
-const ship = {
-  radius: 10,
-  orbitRadius: orbit.outer
+let ship = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  radius: 8,
+  angle: 0,
+  orbitRadius: 120
 };
 
 let asteroids = [];
-let score = 0;
 
-let asteroidCount = 1;
-let lastLevel = 0;
-let pulse = 0;
 
-let animationId;
+// ===============================
+// 🚀 GAME LOOP
+// ===============================
+function gameLoop() {
+  if (!gameRunning) return;
 
-// stars
-let stars = [];
-for (let i = 0; i < 100; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height
-  });
+  updateGame();
+  drawGame();
+
+  requestAnimationFrame(gameLoop);
 }
 
-// control
-window.addEventListener("click", () => {
-  if (currentOrbit === "outer") {
-    currentOrbit = "inner";
-    targetOrbit = orbit.inner;
-  } else {
-    currentOrbit = "outer";
-    targetOrbit = orbit.outer;
-  }
-   pulse = 15;
-});
 
-// draw planet
-function drawPlanet() {
-  ctx.beginPath();
-  ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "#0af";
-  ctx.fill();
+// ===============================
+// 🔧 UPDATE (LOGIC)
+// ===============================
+function updateGame() {
+  updateShip();
+  updateAsteroids();
+  checkCollisions();
 }
 
-// draw orbits
-function drawOrbit() {
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, orbit.inner, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.1)";
-  ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, orbit.outer, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.3)";
-  ctx.stroke();
+// ===============================
+// 🎨 DRAW (RENDER)
+// ===============================
+function drawGame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawOrbit();
+  drawShip();
+  drawAsteroids();
 }
 
-// draw ship
+
+// ===============================
+// 🚀 SHIP LOGIC
+// ===============================
+function updateShip() {
+  ship.angle += 0.03;
+
+  ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
+  ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
+}
+
 function drawShip() {
-  const x = centerX + ship.orbitRadius * Math.cos(angle);
-  const y = centerY + ship.orbitRadius * Math.sin(angle);
-
-  // 💥 POP RING EFFECT
-  if (pulse > 0) {
-    ctx.beginPath();
-    ctx.arc(x, y, ship.radius + pulse, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(0,170,255,0.6)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    pulse *= 0.8; // fade out effect
-  }
-
-  // 🚀 SHIP
   ctx.beginPath();
-  ctx.arc(x, y, ship.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "#fff";
-
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = "#0af";
-
+  ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
+  ctx.fillStyle = "#00f0ff";
   ctx.fill();
-  ctx.shadowBlur = 0;
 }
 
-// stars
-function drawStars() {
-  stars.forEach(s => {
-    ctx.fillStyle = "white";
-    ctx.fillRect(s.x, s.y, 2, 2);
+
+// ===============================
+// ☄️ ASTEROIDS
+// ===============================
+function spawnAsteroid() {
+  let side = Math.floor(Math.random() * 4);
+
+  let x, y;
+
+  if (side === 0) { x = 0; y = Math.random() * canvas.height; }
+  if (side === 1) { x = canvas.width; y = Math.random() * canvas.height; }
+  if (side === 2) { x = Math.random() * canvas.width; y = 0; }
+  if (side === 3) { x = Math.random() * canvas.width; y = canvas.height; }
+
+  let angle = Math.atan2(canvas.height/2 - y, canvas.width/2 - x);
+
+  asteroids.push({
+    x,
+    y,
+    radius: 10 + Math.random() * 10,
+    speed: 2,
+    vx: Math.cos(angle),
+    vy: Math.sin(angle)
   });
 }
 
-// spawn asteroid
-function spawnAsteroid() {
-
-  for (let i = 0; i < Math.floor(asteroidCount); i++) {
-
-    const a = Math.random() * Math.PI * 2;
-    const dist = canvas.width;
-
-    const x = centerX + dist * Math.cos(a);
-    const y = centerY + dist * Math.sin(a);
-
-    asteroids.push({
-      x,
-      y,
-      radius: 6 + Math.random() * 6,
-      speed: 1 + Math.random() * 1.5,
-      angle: a
-    });
+function updateAsteroids() {
+  if (Math.random() < 0.02) {
+    spawnAsteroid();
   }
 
+  asteroids.forEach(ast => {
+    ast.x += ast.vx * ast.speed;
+    ast.y += ast.vy * ast.speed;
+  });
 }
 
-// draw asteroid
 function drawAsteroids() {
-  asteroids.forEach((a, i) => {
-    a.x -= Math.cos(a.angle) * a.speed;
-    a.y -= Math.sin(a.angle) * a.speed;
+  ctx.fillStyle = "#aaa";
 
+  asteroids.forEach(ast => {
     ctx.beginPath();
-    ctx.arc(a.x, a.y, a.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#aaa";
+    ctx.arc(ast.x, ast.y, ast.radius, 0, Math.PI * 2);
     ctx.fill();
+  });
+}
 
-    // collision
-    const shipX = centerX + ship.orbitRadius * Math.cos(angle);
-    const shipY = centerY + ship.orbitRadius * Math.sin(angle);
 
-    const dx = a.x - shipX;
-    const dy = a.y - shipY;
-    const dist = Math.sqrt(dx * dx + dy * dy);
+// ===============================
+// 💥 COLLISION SYSTEM
+// ===============================
+function checkCollisions() {
+  asteroids.forEach(ast => {
+    let dx = ship.x - ast.x;
+    let dy = ship.y - ast.y;
 
-    if (dist < a.radius + ship.radius) {
-     document.getElementById("gameOverUI").style.display = "flex";
-document.getElementById("finalScore").innerText = "Score: " + Math.floor(score);
-cancelAnimationFrame(animationId);
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < ship.radius + ast.radius) {
+      handleCrash();
     }
   });
 }
 
-// game loop
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawStars();
-  drawPlanet();
-  drawOrbit();
+// ===============================
+// 💀 CRASH HANDLER
+// ===============================
+function handleCrash() {
+  if (!gameRunning) return;
 
- let switchSpeed = Math.min(0.25 + (score / 1000), 0.5);
-ship.orbitRadius += (targetOrbit - ship.orbitRadius) * switchSpeed;
-  
-  let speed = 0.02 + (Math.floor(score / 200) * 0.002);
-angle += speed;
-  
-  drawShip();
+  gameRunning = false;
 
-  drawAsteroids();
-
-  score += 0.1;
-  let level = Math.floor(score / 100);
-
-if (level > lastLevel) {
-  lastLevel = level;
-  asteroidCount += 0.3;
-}
-  
-  document.getElementById("scoreUI").innerText =
-  "Score: " + Math.floor(score);
-
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-
-  animationId = requestAnimationFrame(animate);
+  document.getElementById("crashPopup").classList.remove("hidden");
+  document.getElementById("finalScore").innerText = "Score: " + score;
 }
 
-// spawn loop
-setInterval(spawnAsteroid, 1000);
 
-animate();
+// ===============================
+// 🔁 RESTART SYSTEM
+// ===============================
+function restartGame() {
+  score = 0;
+  asteroids = [];
+  ship.angle = 0;
+  gameRunning = true;
+
+  document.getElementById("crashPopup").classList.add("hidden");
+
+  gameLoop();
+}
+
+
+// ===============================
+// 🟢 START GAME
+// ===============================
+gameLoop();
