@@ -51,7 +51,7 @@ body {
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1000; /* 🔥 LOW रखो */
+  z-index: 10; /* 🔥 LOW रखो */
 }
 
 .back-btn {
