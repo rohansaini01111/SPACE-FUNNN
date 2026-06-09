@@ -30,6 +30,9 @@ const ship = {
 let asteroids = [];
 let score = 0;
 
+let asteroidCount = 1;
+let lastLevel = 0;
+
 let animationId;
 
 // stars
@@ -99,20 +102,24 @@ function drawStars() {
 
 // spawn asteroid
 function spawnAsteroid() {
-  const a = Math.random() * Math.PI * 2;
 
-  const dist = canvas.width;
+  for (let i = 0; i < Math.floor(asteroidCount); i++) {
 
-  const x = centerX + dist * Math.cos(a);
-  const y = centerY + dist * Math.sin(a);
+    const a = Math.random() * Math.PI * 2;
+    const dist = canvas.width;
 
-  asteroids.push({
-    x,
-    y,
-    radius: 6 + Math.random() * 6,
-    speed: 1 + Math.random() * 2,
-    angle: a
-  });
+    const x = centerX + dist * Math.cos(a);
+    const y = centerY + dist * Math.sin(a);
+
+    asteroids.push({
+      x,
+      y,
+      radius: 6 + Math.random() * 6,
+      speed: 1 + Math.random() * 1.5,
+      angle: a
+    });
+  }
+
 }
 
 // draw asteroid
@@ -152,12 +159,21 @@ function animate() {
 
   ship.orbitRadius += (targetOrbit - ship.orbitRadius) * 0.1;
 
-  angle += 0.02;
+  let speed = 0.02 + (Math.floor(score / 200) * 0.002);
+angle += speed;
+  
   drawShip();
 
   drawAsteroids();
 
   score += 0.1;
+  let level = Math.floor(score / 100);
+
+if (level > lastLevel) {
+  lastLevel = level;
+  asteroidCount += 0.3;
+}
+  
   document.getElementById("scoreUI").innerText =
   "Score: " + Math.floor(score);
 
