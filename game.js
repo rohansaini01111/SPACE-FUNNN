@@ -145,13 +145,6 @@ function drawShip() {
 
   ctx.restore();
 }
-function drawShip() {
-  ctx.beginPath();
-  ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "#00f0ff";
-  ctx.fill();
-}
-
 
 // ===============================
 // ☄️ ASTEROIDS
