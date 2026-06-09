@@ -133,30 +133,44 @@ function drawShip() {
   ctx.shadowColor = "#00f0ff";
   ctx.shadowBlur = 20;
 
-  // 🔥 ENGINE FLAME (bigger + animated feel)
+  // 🚀 MAIN BODY (diamond shape)
   ctx.beginPath();
-  ctx.moveTo(0, 14);
-  ctx.lineTo(4, 22);
-  ctx.lineTo(-4, 22);
-  ctx.closePath();
-
- ctx.fillStyle = Math.random() > 0.5 ? "orange" : "yellow";
-  ctx.fill();
-
-  // 🚀 SHIP BODY (bigger + sharp)
-  ctx.beginPath();
-  ctx.moveTo(0, -14);   // top
-  ctx.lineTo(8, 10);    // right
-  ctx.lineTo(0, 6);     // center cut
-  ctx.lineTo(-8, 10);   // left
+  ctx.moveTo(0, -14);   // nose
+  ctx.lineTo(6, 0);     // right mid
+  ctx.lineTo(0, 10);    // bottom
+  ctx.lineTo(-6, 0);    // left mid
   ctx.closePath();
 
   ctx.fillStyle = "#00f0ff";
   ctx.fill();
 
+  // 🪽 WINGS
+  ctx.beginPath();
+  ctx.moveTo(-10, 6);
+  ctx.lineTo(-4, 2);
+  ctx.lineTo(-4, 10);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(10, 6);
+  ctx.lineTo(4, 2);
+  ctx.lineTo(4, 10);
+  ctx.closePath();
+  ctx.fill();
+
+  // 🔥 ENGINE FLAME (center)
+  ctx.beginPath();
+  ctx.moveTo(0, 10);
+  ctx.lineTo(3, 20);
+  ctx.lineTo(-3, 20);
+  ctx.closePath();
+
+  ctx.fillStyle = Math.random() > 0.5 ? "orange" : "yellow";
+  ctx.fill();
+
   ctx.restore();
 }
-
 // ===============================
 // ☄️ ASTEROIDS
 // ===============================
