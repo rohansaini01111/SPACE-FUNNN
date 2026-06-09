@@ -1,1 +1,28 @@
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+/* menu */
+.menu {
+  text-align: center;
+}
+
+.game-card {
+  border: 1px solid #0af;
+  padding: 20px 40px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.game-card:hover {
+  background: rgba(0,170,255,0.2);
+  transform: scale(1.05);
+}
