@@ -163,7 +163,6 @@ function animate() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("Score: " + Math.floor(score), 20, 40);
 
   animationId = requestAnimationFrame(animate);
 }
