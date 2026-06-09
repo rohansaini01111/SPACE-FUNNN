@@ -159,17 +159,16 @@ function handleCrash() {
 // 🔁 RESTART SYSTEM
 // ===============================
 function restartGame() {
-  // 🔄 reset state
+  console.log("RESTART CLICKED");  // 🔥 test line
+
   score = 0;
   asteroids = [];
   ship.angle = 0;
 
   gameRunning = true;
 
-  // ❗ popup hide
   document.getElementById("crashPopup").classList.add("hidden");
 
-  // 💥 CRITICAL: loop restart
   requestAnimationFrame(gameLoop);
 }
 
