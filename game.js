@@ -140,7 +140,6 @@ let spawnTimer = 0;
 function updateAsteroids() {
   spawnTimer++;
 
-  // 🎯 controlled spawn (no flood)
   if (spawnTimer > 60) {
     spawnAsteroid();
     spawnTimer = 0;
@@ -152,19 +151,18 @@ function updateAsteroids() {
     ast.x += ast.vx * ast.speed;
     ast.y += ast.vy * ast.speed;
 
-    // 🔥 OUTSIDE SCREEN = SCORE
-    if (
-      ast.x < -50 ||
-      ast.x > canvas.width + 50 ||
-      ast.y < -50 ||
-      ast.y > canvas.height + 50
-    ) {
-      asteroids.splice(i, 1);
-      score++; // 💥 YAHI SCORE BADH RAHA HAI
+    // 🎯 DISTANCE FROM CENTER
+    let dx = ast.x - canvas.width / 2;
+    let dy = ast.y - canvas.height / 2;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+
+    // 🔥 अगर asteroid center cross कर गया (planet ke pass)
+    if (dist < 30) {
+      asteroids.splice(i, 1); // remove
+      score++; // 💥 increase score
     }
   }
 }
-
 function drawAsteroids() {
   ctx.fillStyle = "#aaa";
 
