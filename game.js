@@ -20,6 +20,9 @@ let ship = {
 
 let asteroids = [];
 
+let orbits = [80, 120, 160, 200];   // 🔵 सभी orbit radius
+let currentOrbitIndex = 1;          // 🔵 default orbit
+
 
 // ===============================
 // 🚀 GAME LOOP
