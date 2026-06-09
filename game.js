@@ -135,26 +135,34 @@ function spawnAsteroid() {
   });
 }
 
-function updateAsteroids() {
-  if (Math.random() < 0.02) spawnAsteroid();
+let spawnTimer = 0;
 
-  asteroids.forEach((ast, index) => {
+function updateAsteroids() {
+  spawnTimer++;
+
+  // 🎯 controlled spawn (no flood)
+  if (spawnTimer > 60) {
+    spawnAsteroid();
+    spawnTimer = 0;
+  }
+
+  for (let i = asteroids.length - 1; i >= 0; i--) {
+    let ast = asteroids[i];
+
     ast.x += ast.vx * ast.speed;
     ast.y += ast.vy * ast.speed;
 
-    // 🎯 अगर asteroid center cross कर गया (missed)
-    let dx = ast.x - canvas.width / 2;
-    let dy = ast.y - canvas.height / 2;
-    let dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist < 20) {
-      // 💥 remove asteroid
-      asteroids.splice(index, 1);
-
-      // 🔥 increase score
-      score++;
+    // 🔥 OUTSIDE SCREEN = SCORE
+    if (
+      ast.x < -50 ||
+      ast.x > canvas.width + 50 ||
+      ast.y < -50 ||
+      ast.y > canvas.height + 50
+    ) {
+      asteroids.splice(i, 1);
+      score++; // 💥 YAHI SCORE BADH RAHA HAI
     }
-  });
+  }
 }
 
 function drawAsteroids() {
@@ -233,10 +241,10 @@ document.addEventListener("keydown", (e) => {
 
 });
 
+gameLoop();
+
 function drawScore() {
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + score, 20, 30);
 }
-
-gameLoop();
