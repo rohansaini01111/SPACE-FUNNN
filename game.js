@@ -133,8 +133,9 @@ function drawAsteroids() {
     const dist = Math.sqrt(dx * dx + dy * dy);
 
     if (dist < a.radius + ship.radius) {
-      alert("💀 Game Over");
-      location.reload();
+     document.getElementById("gameOverUI").style.display = "flex";
+document.getElementById("finalScore").innerText = "Score: " + Math.floor(score);
+cancelAnimationFrame(animationId);
     }
   });
 }
