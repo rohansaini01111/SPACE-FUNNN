@@ -68,10 +68,23 @@ function drawGame() {
 // 🪐 PLANET + ORBITS
 // ===============================
 function drawPlanet() {
+  let gradient = ctx.createRadialGradient(
+    canvas.width/2, canvas.height/2, 10,
+    canvas.width/2, canvas.height/2, 50
+  );
+
+  gradient.addColorStop(0, "#4facfe");
+  gradient.addColorStop(1, "#000c40");
+
   ctx.beginPath();
   ctx.arc(canvas.width / 2, canvas.height / 2, 40, 0, Math.PI * 2);
-  ctx.fillStyle = "#1e90ff";
+
+  ctx.fillStyle = gradient;
   ctx.fill();
+
+  // 🔥 glow aura
+  ctx.shadowColor = "#4facfe";
+  ctx.shadowBlur = 30;
 }
 
 function drawOrbit() {
@@ -84,7 +97,14 @@ function drawOrbit() {
       : "rgba(255,255,255,0.2)";
 
     ctx.lineWidth = i === currentOrbitIndex ? 2 : 1;
+
+    ctx.setLineDash([5, 5]);
+ctx.lineDashOffset = performance.now() / 50;
+    
     ctx.stroke();
+
+    ctx.setLineDash([]);
+    
   });
 }
 
@@ -92,18 +112,28 @@ function drawOrbit() {
 // ===============================
 // 🚀 SHIP
 // ===============================
-function updateShip() {
-  ship.angle += 0.03;
+function drawShip() {
+  ctx.save();
 
-  let target = orbits[currentOrbitIndex];
+  ctx.translate(ship.x, ship.y);
+  ctx.rotate(ship.angle + Math.PI / 2);
 
-  // 🔥 SMOOTH SWITCH
-  ship.orbitRadius += (target - ship.orbitRadius) * 0.1;
+  // 🔥 glow
+  ctx.shadowColor = "#00f0ff";
+  ctx.shadowBlur = 15;
 
-  ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
-  ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
+  // 🚀 triangle ship
+  ctx.beginPath();
+  ctx.moveTo(0, -10);
+  ctx.lineTo(6, 8);
+  ctx.lineTo(-6, 8);
+  ctx.closePath();
+
+  ctx.fillStyle = "#00f0ff";
+  ctx.fill();
+
+  ctx.restore();
 }
-
 function drawShip() {
   ctx.beginPath();
   ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
