@@ -158,6 +158,8 @@ function animate() {
   drawAsteroids();
 
   score += 0.1;
+  document.getElementById("scoreUI").innerText =
+  "Score: " + Math.floor(score);
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
