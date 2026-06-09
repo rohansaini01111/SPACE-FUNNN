@@ -167,10 +167,9 @@ function animate() {
 
   drawAsteroids();
 
-  // 🎯 SCORE INCREASE
+  // 🎯 SCORE
   score += 0.1;
 
-  // 🎯 SCORE DISPLAY
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + Math.floor(score), 20, 40);
