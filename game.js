@@ -146,8 +146,6 @@ function checkCollisions() {
 // 💀 CRASH HANDLER
 // ===============================
 function handleCrash() {
-  if (!gameRunning) return;
-
   gameRunning = false;
 
   document.getElementById("crashPopup").classList.remove("hidden");
@@ -159,17 +157,28 @@ function handleCrash() {
 // 🔁 RESTART SYSTEM
 // ===============================
 function restartGame() {
-  console.log("RESTART CLICKED");  // 🔥 test line
+  console.log("RESTART CLICKED");
 
+  // reset everything
   score = 0;
   asteroids = [];
-  ship.angle = 0;
+
+  ship = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    radius: 8,
+    angle: 0,
+    orbitRadius: 120
+  };
 
   gameRunning = true;
 
   document.getElementById("crashPopup").classList.add("hidden");
 
-  requestAnimationFrame(gameLoop);
+  // 💥 force restart
+  setTimeout(() => {
+    requestAnimationFrame(gameLoop);
+  }, 50);
 }
 
 // ===============================
