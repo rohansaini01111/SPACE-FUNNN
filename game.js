@@ -157,8 +157,9 @@ function animate() {
   drawPlanet();
   drawOrbit();
 
-  ship.orbitRadius += (targetOrbit - ship.orbitRadius) * 0.1;
-
+ let switchSpeed = Math.min(0.25 + (score / 1000), 0.5);
+ship.orbitRadius += (targetOrbit - ship.orbitRadius) * switchSpeed;
+  
   let speed = 0.02 + (Math.floor(score / 200) * 0.002);
 angle += speed;
   
