@@ -133,13 +133,21 @@ function drawShip() {
   ctx.shadowColor = "#00f0ff";
   ctx.shadowBlur = 15;
 
-  // 🚀 triangle ship
+  // 🔥 ENGINE FLAME
+  ctx.beginPath();
+  ctx.moveTo(0, 10);
+  ctx.lineTo(3, 16);
+  ctx.lineTo(-3, 16);
+  ctx.closePath();
+  ctx.fillStyle = "orange";
+  ctx.fill();
+
+  // 🚀 SHIP BODY (triangle)
   ctx.beginPath();
   ctx.moveTo(0, -10);
   ctx.lineTo(6, 8);
   ctx.lineTo(-6, 8);
   ctx.closePath();
-
   ctx.fillStyle = "#00f0ff";
   ctx.fill();
 
