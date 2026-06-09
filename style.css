@@ -53,3 +53,54 @@ canvas {
   font-size: 20px;
   z-index: 10;
 }
+#crashPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 20, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  z-index: 999;
+}
+
+.hidden {
+  display: none;
+}
+
+.popup-box {
+  background: radial-gradient(circle, #0a0a2a, #000);
+  border: 2px solid #00f0ff;
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 0 25px #00f0ff;
+  animation: popIn 0.4s ease;
+}
+
+.popup-box h1 {
+  color: #ff3c3c;
+  margin-bottom: 10px;
+}
+
+.popup-box button {
+  padding: 10px 20px;
+  background: #00f0ff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
