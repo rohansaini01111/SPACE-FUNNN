@@ -51,11 +51,22 @@ function updateGame() {
 }
 
 function drawOrbit() {
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, ship.orbitRadius, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255,255,255,0.2)";
-  ctx.lineWidth = 1;
-  ctx.stroke();
+  orbits.forEach((radius, index) => {
+
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+
+    // 🔥 active orbit highlight
+    if (index === currentOrbitIndex) {
+      ctx.strokeStyle = "#00f0ff";
+      ctx.lineWidth = 2;
+    } else {
+      ctx.strokeStyle = "rgba(255,255,255,0.2)";
+      ctx.lineWidth = 1;
+    }
+
+    ctx.stroke();
+  });
 }
 
 function drawGame() {
