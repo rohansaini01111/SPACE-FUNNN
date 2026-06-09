@@ -48,6 +48,17 @@ function updateGame() {
    document.getElementById("scoreUI").innerText = "Score: " + score;
 }
 
+function updateShip() {
+  ship.angle += 0.03;
+
+  let target = orbits[currentOrbitIndex];
+
+  // 🔥 smooth orbit switching
+  ship.orbitRadius += (target - ship.orbitRadius) * 0.1;
+
+  ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
+  ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
+}
 
 // ===============================
 // 🎨 DRAW
