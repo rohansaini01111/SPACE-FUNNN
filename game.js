@@ -54,6 +54,7 @@ window.addEventListener("click", () => {
     currentOrbit = "outer";
     targetOrbit = orbit.outer;
   }
+   pulse = 15;
 });
 
 // draw planet
@@ -82,6 +83,18 @@ function drawShip() {
   const x = centerX + ship.orbitRadius * Math.cos(angle);
   const y = centerY + ship.orbitRadius * Math.sin(angle);
 
+  // 💥 POP RING EFFECT
+  if (pulse > 0) {
+    ctx.beginPath();
+    ctx.arc(x, y, ship.radius + pulse, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(0,170,255,0.6)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    pulse *= 0.8; // fade out effect
+  }
+
+  // 🚀 SHIP
   ctx.beginPath();
   ctx.arc(x, y, ship.radius, 0, Math.PI * 2);
   ctx.fillStyle = "#fff";
