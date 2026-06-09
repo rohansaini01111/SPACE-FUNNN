@@ -34,7 +34,7 @@ body {
   color: white;
   font-size: 20px;
   font-weight: bold;
-  z-index: 2000; /* 🔥 back button se upar */
+  z-index: 9999; /* 🔥 back button se upar */
 }
 .back-btn {
   position: absolute;
@@ -47,11 +47,11 @@ body {
   cursor: pointer;
 }
 
-canvas {
+.back-btn {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1; /* 🔥 lowest */
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* 🔥 LOW रखो */
 }
 
 .back-btn {
