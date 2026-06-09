@@ -56,11 +56,11 @@ function drawOrbit() {
 function drawGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawOrbit();      // 🔥 YAHI (top pe)
-  drawShip();
-  drawAsteroids();
+  drawPlanet();    // 🔵 center
+  drawOrbit();     // ⚪ circle
+  drawShip();      // 🚀 moving
+  drawAsteroids(); // ☄️
 }
-
 
 // ===============================
 // 🚀 SHIP LOGIC
@@ -79,6 +79,22 @@ function drawShip() {
   ctx.fill();
 }
 
+// 🚀 SHIP DRAW FUNCTION ke paas
+function drawShip() {
+  ctx.beginPath();
+  ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
+  ctx.fillStyle = "#00f0ff";
+  ctx.fill();
+}
+
+
+// 🔵 YAHI ADD KAR (drawShip ke niche)
+function drawPlanet() {
+  ctx.beginPath();
+  ctx.arc(canvas.width / 2, canvas.height / 2, 40, 0, Math.PI * 2);
+  ctx.fillStyle = "#1e90ff";
+  ctx.fill();
+}
 
 // ===============================
 // ☄️ ASTEROIDS
