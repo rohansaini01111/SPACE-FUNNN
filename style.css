@@ -158,3 +158,12 @@ canvas {
 
   z-index: 9999;
 }
+@keyframes pulseGlow {
+  0% { text-shadow: 0 0 5px #00f0ff; }
+  50% { text-shadow: 0 0 20px #00f0ff; }
+  100% { text-shadow: 0 0 5px #00f0ff; }
+}
+
+#scoreUI {
+  animation: pulseGlow 2s infinite;
+}
