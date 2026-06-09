@@ -28,14 +28,15 @@ body {
 }
 
 #scoreUI {
-  position: fixed;
+  position: fixed !important;
   top: 20px;
   right: 20px;
   color: white;
   font-size: 20px;
   font-weight: bold;
-  z-index: 9999; /* 🔥 back button se upar */
+  z-index: 99999 !important; /* 💣 MAX FORCE */
 }
+
 .back-btn {
   position: absolute;
   top: 20px;
@@ -48,14 +49,14 @@ body {
 }
 
 .back-btn {
-  position: fixed;
+  position: fixed !important;
   top: 20px;
   left: 20px;
-  z-index: 10; /* 🔥 LOW रखो */
+  z-index: 10 !important; /* 💥 force lower */
 }
 
 .back-btn {
-  z-index: 1000;
+  z-index: 10;
   position: absolute;
 }
 
@@ -117,4 +118,11 @@ body {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
