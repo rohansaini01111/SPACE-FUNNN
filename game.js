@@ -211,7 +211,32 @@ function restartGame() {
   }, 50);
 }
 
-// ===============================
-// 🟢 START GAME
-// ===============================
+document.addEventListener("keydown", (e) => {
+
+  console.log("key pressed:", e.key); // 🔥 debug
+
+  let num = parseInt(e.key);
+
+  if (num >= 1 && num <= orbits.length) {
+    currentOrbitIndex = num - 1;
+  }
+
+});
+// 🔥 INPUT SYSTEM (file ke bottom me add karo)
+document.addEventListener("keydown", (e) => {
+
+  console.log("key pressed:", e.key); // debug
+
+  // 🎯 NUMBER KEY SWITCH
+  let num = parseInt(e.key);
+  if (num >= 1 && num <= orbits.length) {
+    currentOrbitIndex = num - 1;
+  }
+
+  // 🎯 SPACE KEY SWITCH (YAHI ADD KARNA THA)
+  if (e.code === "Space") {
+    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+  }
+
+});
 gameLoop();
