@@ -26,3 +26,13 @@ body {
   background: rgba(0,170,255,0.2);
   transform: scale(1.05);
 }
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+}
