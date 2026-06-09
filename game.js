@@ -25,6 +25,8 @@ let asteroids = [];
 // 🚀 GAME LOOP
 // ===============================
 function gameLoop() {
+  console.log("loop running"); // 🔥
+
   if (!gameRunning) return;
 
   updateGame();
