@@ -34,6 +34,7 @@ const ship = {
 
 // asteroids
 let asteroids = [];
+let score = 0;
 
 // ⭐ stars
 let stars = [];
@@ -135,6 +136,18 @@ function drawAsteroids() {
 
     if (dist < 20) {
       asteroids.splice(i, 1);
+      // 🚀 ship position
+const shipX = centerX + ship.orbitRadius * Math.cos(angle);
+const shipY = centerY + ship.orbitRadius * Math.sin(angle);
+
+// 💥 collision check
+const dx = a.x - shipX;
+const dy = a.y - shipY;
+const distance = Math.sqrt(dx * dx + dy * dy);
+
+if (distance < a.radius + ship.radius) {
+  alert("💀 Game Over!");
+  location.reload();
     }
   });
 }
@@ -147,13 +160,20 @@ function animate() {
   drawPlanet();
   drawOrbit();
 
-  // smooth orbit
   ship.orbitRadius += (targetOrbit - ship.orbitRadius) * 0.1;
 
   angle += 0.02;
   drawShip();
 
   drawAsteroids();
+
+  // 🎯 SCORE INCREASE
+  score += 0.1;
+
+  // 🎯 SCORE DISPLAY
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText("Score: " + Math.floor(score), 20, 40);
 
   requestAnimationFrame(animate);
 }
@@ -162,3 +182,4 @@ function animate() {
 setInterval(spawnAsteroid, 1000);
 
 animate();
+
