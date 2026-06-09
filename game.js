@@ -1,28 +1,23 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// canvas full screen
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// center
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-// planet
 const planet = {
   x: centerX,
   y: centerY,
   radius: 60
 };
 
-// orbits
 const orbit = {
   inner: 120,
   outer: 180
 };
 
-// ship
 let angle = 0;
 let currentOrbit = "outer";
 let targetOrbit = orbit.outer;
@@ -32,11 +27,10 @@ const ship = {
   orbitRadius: orbit.outer
 };
 
-// asteroids
 let asteroids = [];
 let score = 0;
 
-// ⭐ stars
+// stars
 let stars = [];
 for (let i = 0; i < 100; i++) {
   stars.push({
@@ -45,7 +39,7 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
-// 🎮 controls
+// control
 window.addEventListener("click", () => {
   if (currentOrbit === "outer") {
     currentOrbit = "inner";
@@ -56,7 +50,7 @@ window.addEventListener("click", () => {
   }
 });
 
-// 🌍 draw planet
+// draw planet
 function drawPlanet() {
   ctx.beginPath();
   ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
@@ -64,7 +58,7 @@ function drawPlanet() {
   ctx.fill();
 }
 
-// 🌀 draw orbits
+// draw orbits
 function drawOrbit() {
   ctx.beginPath();
   ctx.arc(centerX, centerY, orbit.inner, 0, Math.PI * 2);
@@ -77,7 +71,7 @@ function drawOrbit() {
   ctx.stroke();
 }
 
-// 🚀 ship
+// draw ship
 function drawShip() {
   const x = centerX + ship.orbitRadius * Math.cos(angle);
   const y = centerY + ship.orbitRadius * Math.sin(angle);
@@ -93,7 +87,7 @@ function drawShip() {
   ctx.shadowBlur = 0;
 }
 
-// ⭐ stars
+// stars
 function drawStars() {
   stars.forEach(s => {
     ctx.fillStyle = "white";
@@ -101,7 +95,7 @@ function drawStars() {
   });
 }
 
-// ☄️ spawn asteroid
+// spawn asteroid
 function spawnAsteroid() {
   const a = Math.random() * Math.PI * 2;
 
@@ -119,7 +113,7 @@ function spawnAsteroid() {
   });
 }
 
-// ☄️ draw asteroid
+// draw asteroid
 function drawAsteroids() {
   asteroids.forEach((a, i) => {
     a.x -= Math.cos(a.angle) * a.speed;
@@ -130,29 +124,22 @@ function drawAsteroids() {
     ctx.fillStyle = "#aaa";
     ctx.fill();
 
-    const dx = a.x - centerX;
-    const dy = a.y - centerY;
+    // collision
+    const shipX = centerX + ship.orbitRadius * Math.cos(angle);
+    const shipY = centerY + ship.orbitRadius * Math.sin(angle);
+
+    const dx = a.x - shipX;
+    const dy = a.y - shipY;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist < 20) {
-      asteroids.splice(i, 1);
-      // 🚀 ship position
-const shipX = centerX + ship.orbitRadius * Math.cos(angle);
-const shipY = centerY + ship.orbitRadius * Math.sin(angle);
-
-// 💥 collision check
-const dx = a.x - shipX;
-const dy = a.y - shipY;
-const distance = Math.sqrt(dx * dx + dy * dy);
-
-if (distance < a.radius + ship.radius) {
-  alert("💀 Game Over!");
-  location.reload();
+    if (dist < a.radius + ship.radius) {
+      alert("💀 Game Over");
+      location.reload();
     }
   });
 }
 
-// 🎮 game loop
+// game loop
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -167,7 +154,6 @@ function animate() {
 
   drawAsteroids();
 
-  // 🎯 SCORE
   score += 0.1;
 
   ctx.fillStyle = "white";
@@ -181,4 +167,3 @@ function animate() {
 setInterval(spawnAsteroid, 1000);
 
 animate();
-
