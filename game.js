@@ -10,26 +10,24 @@ canvas.height = window.innerHeight;
 let gameRunning = true;
 let score = 0;
 
+let orbits = [80, 120, 160, 200];
+let currentOrbitIndex = 1;
+
 let ship = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 8,
   angle: 0,
-  orbitRadius: 120
+  orbitRadius: orbits[currentOrbitIndex]
 };
 
 let asteroids = [];
-
-let orbits = [80, 120, 160, 200];   // 🔵 सभी orbit radius
-let currentOrbitIndex = 1;          // 🔵 default orbit
 
 
 // ===============================
 // 🚀 GAME LOOP
 // ===============================
 function gameLoop() {
-  console.log("loop running"); // 🔥
-
   if (!gameRunning) return;
 
   updateGame();
@@ -40,38 +38,19 @@ function gameLoop() {
 
 
 // ===============================
-// 🔧 UPDATE (LOGIC)
+// 🔧 UPDATE
 // ===============================
 function updateGame() {
-  console.log("updating..."); // 🔍
-
   updateShip();
   updateAsteroids();
   checkCollisions();
 }
 
-function drawOrbit() {
-  orbits.forEach((radius, index) => {
 
-    ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
-
-    // 🔥 active orbit highlight
-    if (index === currentOrbitIndex) {
-      ctx.strokeStyle = "#00f0ff";
-      ctx.lineWidth = 2;
-    } else {
-      ctx.strokeStyle = "rgba(255,255,255,0.2)";
-      ctx.lineWidth = 1;
-    }
-
-    ctx.stroke();
-  });
-}
-
+// ===============================
+// 🎨 DRAW
+// ===============================
 function drawGame() {
-  console.log("drawing frame"); // 🔥 YAHI
-
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -80,18 +59,48 @@ function drawGame() {
   drawShip();
   drawAsteroids();
 }
+
+
 // ===============================
-// 🚀 SHIP LOGIC
+// 🪐 PLANET + ORBITS
+// ===============================
+function drawPlanet() {
+  ctx.beginPath();
+  ctx.arc(canvas.width / 2, canvas.height / 2, 40, 0, Math.PI * 2);
+  ctx.fillStyle = "#1e90ff";
+  ctx.fill();
+}
+
+function drawOrbit() {
+  orbits.forEach((r, i) => {
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, r, 0, Math.PI * 2);
+
+    ctx.strokeStyle = i === currentOrbitIndex
+      ? "#00f0ff"
+      : "rgba(255,255,255,0.2)";
+
+    ctx.lineWidth = i === currentOrbitIndex ? 2 : 1;
+    ctx.stroke();
+  });
+}
+
+
+// ===============================
+// 🚀 SHIP
 // ===============================
 function updateShip() {
   ship.angle += 0.03;
+
+  let target = orbits[currentOrbitIndex];
+
+  // 🔥 SMOOTH SWITCH
+  ship.orbitRadius += (target - ship.orbitRadius) * 0.1;
 
   ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
   ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
 }
 
-
-// 🚀 SHIP DRAW FUNCTION ke paas
 function drawShip() {
   ctx.beginPath();
   ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2);
@@ -99,14 +108,6 @@ function drawShip() {
   ctx.fill();
 }
 
-
-// 🔵 YAHI ADD KAR (drawShip ke niche)
-function drawPlanet() {
-  ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height / 2, 40, 0, Math.PI * 2);
-  ctx.fillStyle = "#1e90ff";
-  ctx.fill();
-}
 
 // ===============================
 // ☄️ ASTEROIDS
@@ -134,9 +135,7 @@ function spawnAsteroid() {
 }
 
 function updateAsteroids() {
-  if (Math.random() < 0.02) {
-    spawnAsteroid();
-  }
+  if (Math.random() < 0.02) spawnAsteroid();
 
   asteroids.forEach(ast => {
     ast.x += ast.vx * ast.speed;
@@ -156,7 +155,7 @@ function drawAsteroids() {
 
 
 // ===============================
-// 💥 COLLISION SYSTEM
+// 💥 COLLISION
 // ===============================
 function checkCollisions() {
   asteroids.forEach(ast => {
@@ -173,7 +172,7 @@ function checkCollisions() {
 
 
 // ===============================
-// 💀 CRASH HANDLER
+// 💀 CRASH
 // ===============================
 function handleCrash() {
   gameRunning = false;
@@ -184,36 +183,29 @@ function handleCrash() {
 
 
 // ===============================
-// 🔁 RESTART SYSTEM
+// 🔁 RESTART
 // ===============================
 function restartGame() {
-  console.log("RESTART CLICKED");
-
-  // reset everything
   score = 0;
   asteroids = [];
 
-  ship = {
-    x: canvas.width / 2,
-    y: canvas.height / 2,
-    radius: 8,
-    angle: 0,
-    orbitRadius: 120
-  };
+  currentOrbitIndex = 1;
+
+  ship.angle = 0;
+  ship.orbitRadius = orbits[currentOrbitIndex];
 
   gameRunning = true;
 
   document.getElementById("crashPopup").classList.add("hidden");
 
-  // 💥 force restart
-  setTimeout(() => {
-    requestAnimationFrame(gameLoop);
-  }, 50);
+  requestAnimationFrame(gameLoop);
 }
 
-document.addEventListener("keydown", (e) => {
 
-  console.log("key pressed:", e.key); // 🔥 debug
+// ===============================
+// 🎮 INPUT (SINGLE CLEAN SYSTEM)
+// ===============================
+document.addEventListener("keydown", (e) => {
 
   let num = parseInt(e.key);
 
@@ -221,22 +213,14 @@ document.addEventListener("keydown", (e) => {
     currentOrbitIndex = num - 1;
   }
 
-});
-// 🔥 INPUT SYSTEM (file ke bottom me add karo)
-document.addEventListener("keydown", (e) => {
-
-  console.log("key pressed:", e.key); // debug
-
-  // 🎯 NUMBER KEY SWITCH
-  let num = parseInt(e.key);
-  if (num >= 1 && num <= orbits.length) {
-    currentOrbitIndex = num - 1;
-  }
-
-  // 🎯 SPACE KEY SWITCH (YAHI ADD KARNA THA)
   if (e.code === "Space") {
     currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
   }
 
 });
+
+
+// ===============================
+// 🚀 START
+// ===============================
 gameLoop();
