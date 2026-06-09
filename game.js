@@ -32,6 +32,7 @@ let score = 0;
 
 let asteroidCount = 1;
 let lastLevel = 0;
+let pulse = 0;
 
 let animationId;
 
