@@ -131,23 +131,26 @@ function drawShip() {
 
   // 🔥 glow
   ctx.shadowColor = "#00f0ff";
-  ctx.shadowBlur = 15;
+  ctx.shadowBlur = 20;
 
-  // 🔥 ENGINE FLAME
+  // 🔥 ENGINE FLAME (bigger + animated feel)
   ctx.beginPath();
-  ctx.moveTo(0, 10);
-  ctx.lineTo(3, 16);
-  ctx.lineTo(-3, 16);
+  ctx.moveTo(0, 14);
+  ctx.lineTo(4, 22);
+  ctx.lineTo(-4, 22);
   ctx.closePath();
-  ctx.fillStyle = "orange";
+
+ ctx.fillStyle = Math.random() > 0.5 ? "orange" : "yellow";
   ctx.fill();
 
-  // 🚀 SHIP BODY (triangle)
+  // 🚀 SHIP BODY (bigger + sharp)
   ctx.beginPath();
-  ctx.moveTo(0, -10);
-  ctx.lineTo(6, 8);
-  ctx.lineTo(-6, 8);
+  ctx.moveTo(0, -14);   // top
+  ctx.lineTo(8, 10);    // right
+  ctx.lineTo(0, 6);     // center cut
+  ctx.lineTo(-8, 10);   // left
   ctx.closePath();
+
   ctx.fillStyle = "#00f0ff";
   ctx.fill();
 
