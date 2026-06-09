@@ -30,6 +30,8 @@ const ship = {
 let asteroids = [];
 let score = 0;
 
+let animationId;
+
 // stars
 let stars = [];
 for (let i = 0; i < 100; i++) {
@@ -161,7 +163,7 @@ function animate() {
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + Math.floor(score), 20, 40);
 
-  requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
 }
 
 // spawn loop
