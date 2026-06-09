@@ -43,14 +43,18 @@ function updateGame() {
   checkCollisions();
 }
 
+function drawOrbit() {
+  ctx.beginPath();
+  ctx.arc(canvas.width / 2, canvas.height / 2, ship.orbitRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(255,255,255,0.2)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
 
-// ===============================
-// 🎨 DRAW (RENDER)
-// ===============================
 function drawGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawOrbit();
+  drawOrbit();      // 🔥 YAHI (top pe)
   drawShip();
   drawAsteroids();
 }
