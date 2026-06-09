@@ -178,18 +178,31 @@ function drawAsteroids() {
 // 💥 COLLISION
 // ===============================
 function checkCollisions() {
-  asteroids.forEach(ast => {
+  for (let i = asteroids.length - 1; i >= 0; i--) {
+    let ast = asteroids[i];
+
+    // 🎯 distance from center
+    let dxC = ast.x - canvas.width / 2;
+    let dyC = ast.y - canvas.height / 2;
+    let distC = Math.sqrt(dxC * dxC + dyC * dyC);
+
+    // 🔥 अगर asteroid planet तक पहुंच गया
+    if (distC < 40) {
+      asteroids.splice(i, 1);
+      score++; // 💥 SCORE
+      continue;
+    }
+
+    // 🎯 collision with ship
     let dx = ship.x - ast.x;
     let dy = ship.y - ast.y;
-
     let distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < ship.radius + ast.radius) {
       handleCrash();
     }
-  });
+  }
 }
-
 
 // ===============================
 // 💀 CRASH
