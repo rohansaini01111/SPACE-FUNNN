@@ -147,7 +147,6 @@ function drawGame() {
 
   drawPlanet();
   drawOrbit();
-  drawTrail();
   drawShip();
   drawAsteroids();
   drawParticles();
@@ -353,40 +352,25 @@ function restartGame() {
 }
 
 // ===============================
-// 🎮 INPUT
-// ===============================
-// ===============================
-// 🎮 INPUT (FINAL FIXED)
+// 🎮 INPUT (STABLE VERSION)
 // ===============================
 
-let isTouchDevice = "ontouchstart" in window;
+let lastTap = 0;
 
-// 📱 MOBILE
-if (isTouchDevice) {
+// 📱 + 💻 universal input
+canvas.addEventListener("pointerdown", (e) => {
 
-  let lastTap = 0;
+  let now = Date.now();
 
-  canvas.addEventListener("touchstart", (e) => {
-    e.preventDefault(); // 🔥 VERY IMPORTANT
+  // 🔥 double trigger fix
+  if (now - lastTap < 150) return;
 
-    let now = Date.now();
+  lastTap = now;
 
-    if (now - lastTap < 150) return;
+  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
 
-    lastTap = now;
+});
 
-    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
-  });
-
-} else {
-
-  // 💻 DESKTOP
-  canvas.addEventListener("mousedown", () => {
-    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
-  });
-
-}
-// ===============================
 gameLoop();
 
 document.addEventListener("keydown", (e) => {
