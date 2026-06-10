@@ -61,6 +61,8 @@ function gameLoop() {
 // 🔧 UPDATE
 // ===============================
 function updateGame() {
+  console.log("running");
+  
   updateShip();
   updateAsteroids();
   checkCollisions();
