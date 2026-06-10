@@ -86,6 +86,7 @@ function updateShip() {
 // 🎨 DRAW
 // ===============================
 function drawGame() {
+  console.log("running");
   ctx.save();
 
   if (shake > 0) {
@@ -101,7 +102,9 @@ function drawGame() {
 
   drawPlanet();
   drawOrbit();
+  if (typeof drawTrail === "function") {
   drawTrail();
+}
   drawShip();
   drawAsteroids();
   drawParticles();
