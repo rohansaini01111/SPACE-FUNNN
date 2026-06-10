@@ -54,14 +54,14 @@ function gameLoop() {
 
 // ================== UPDATE ==================
 function update() {
- let baseSpeed = 0.007; // 🔥 slow overall
+ let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
 
-let orbitSpeedFactor = [
-  1.0,   // orbit 1
-  1.2,   // orbit 2
-  1.4,   // orbit 3
-  1.7    // orbit 4
-];
+ship.currentSpeed = ship.currentSpeed || targetSpeed;
+
+// smooth speed transition
+ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.05;
+
+ship.angle += ship.currentSpeed;
 
   let target = orbits[currentOrbitIndex];
   ship.orbitRadius += (target - ship.orbitRadius) * (0.1 + switchBoost);
