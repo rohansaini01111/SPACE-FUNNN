@@ -78,8 +78,6 @@ ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.05;
 // 💣 THIS LINE IS THE MOST IMPORTANT
 ship.angle += ship.currentSpeed;
 
-  console.log(ship.angle);
-
   let target = orbits[currentOrbitIndex];
   ship.orbitRadius += (target - ship.orbitRadius) * (0.1 + switchBoost);
 
