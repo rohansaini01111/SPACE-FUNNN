@@ -1,173 +1,223 @@
-body {
+/* ===============================
+🌌 GLOBAL RESET + BASE
+=============================== */
+* {
   margin: 0;
-  background: black;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: radial-gradient(circle at center, #020617, #000000);
+  font-family: 'Segoe UI', sans-serif;
   color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
-/* menu */
-.menu {
-  text-align: center;
-}
-
-.game-card {
-  border: 1px solid #0af;
-  padding: 20px 40px;
-  margin-top: 30px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.game-card:hover {
-  background: rgba(0,170,255,0.2);
-  transform: scale(1.05);
-}
-
-#scoreUI {
-  position: fixed !important;
-  top: 60px;
-  right: 20px;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-  z-index: 99999 !important; /* 💣 MAX FORCE */
-}
-
-.back-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 10px;
-  background: black;
-  color: white;
-  border: 1px solid white;
-  cursor: pointer;
-}
-
-.back-btn {
-  position: fixed !important;
-  top: 20px;
-  left: 20px;
-  z-index: 1000; !important; /* 💥 force lower */
-}
-
-.back-btn {
-  z-index: 1000;
-  position: absolute;
-}
-
-.score {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: white;
-  font-size: 20px;
-  z-index: 10;
-}
-#crashPopup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 20, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(6px);
-  z-index: 999;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.popup-box {
-  background: radial-gradient(circle, #0a0a2a, #000);
-  border: 2px solid #00f0ff;
-  padding: 30px;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 0 25px #00f0ff;
-  animation: popIn 0.4s ease;
-}
-
-.popup-box h1 {
-  color: #ff3c3c;
-  margin-bottom: 10px;
-}
-
-.popup-box button {
-  padding: 10px 20px;
-  background: #00f0ff;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-@keyframes popIn {
-  from {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
+/* ===============================
+🖥️ CANVAS (FULLSCREEN + SMOOTH)
+=============================== */
 canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  touch-action: none;
 }
 
-.back-btn {
+/* ===============================
+🚀 HUD (SCORE UI)
+=============================== */
+#scoreUI {
   position: fixed;
   top: 20px;
-  left: 20px;
-}
-
-#scoreUI {
-  position: fixed;
-  top: 25px;
-  right: 30px;
-  font-size: 22px;
-  font-weight: bold;
-}
-#scoreUI {
-  position: fixed;
-  top: 25px;
   right: 30px;
 
-  font-size: 26px;
-  font-weight: bold;
-  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
 
   color: #00f0ff;
 
-  text-shadow: 
+  /* 🔥 neon glow */
+  text-shadow:
     0 0 5px #00f0ff,
     0 0 10px #00f0ff,
     0 0 20px #00f0ff;
 
-  z-index: 9999;
+  z-index: 1000;
+
+  animation: pulseGlow 2s infinite;
 }
+
+/* glow animation */
 @keyframes pulseGlow {
   0% { text-shadow: 0 0 5px #00f0ff; }
   50% { text-shadow: 0 0 20px #00f0ff; }
   100% { text-shadow: 0 0 5px #00f0ff; }
 }
 
-#scoreUI {
-  animation: pulseGlow 2s infinite;
+/* ===============================
+🔙 BACK BUTTON
+=============================== */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+
+  padding: 8px 14px;
+
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+
+  color: #00f0ff;
+  font-size: 14px;
+
+  backdrop-filter: blur(6px);
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  z-index: 1000;
 }
 
-canvas {
-  touch-action: none;
+/* hover effect */
+.back-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 15px #00f0ff;
+  transform: scale(1.05);
+}
+
+/* click effect */
+.back-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===============================
+💥 CRASH POPUP (GLASS UI)
+=============================== */
+#crashPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+
+  z-index: 2000;
+}
+
+.hidden {
+  display: none;
+}
+
+/* popup box */
+.popup-box {
+  padding: 30px 40px;
+
+  border-radius: 12px;
+
+  background: rgba(10, 20, 40, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+
+  backdrop-filter: blur(10px);
+
+  text-align: center;
+
+  box-shadow:
+    0 0 20px rgba(0, 240, 255, 0.3),
+    inset 0 0 20px rgba(0, 240, 255, 0.1);
+
+  animation: popupFade 0.4s ease;
+}
+
+/* popup animation */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-box h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+
+  color: #ff4d4d;
+  text-shadow: 0 0 10px red;
+}
+
+.popup-box p {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+/* restart button */
+.popup-box button {
+  padding: 10px 20px;
+
+  background: linear-gradient(45deg, #00f0ff, #0088ff);
+  border: none;
+  border-radius: 8px;
+
+  color: white;
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* hover */
+.popup-box button:hover {
+  box-shadow: 0 0 20px #00f0ff;
+  transform: translateY(-2px);
+}
+
+/* click */
+.popup-box button:active {
+  transform: scale(0.95);
+}
+
+/* ===============================
+📱 RESPONSIVE (PHONE / TABLET)
+=============================== */
+@media (max-width: 768px) {
+  #scoreUI {
+    font-size: 16px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .back-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .popup-box {
+    width: 80%;
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  #scoreUI {
+    font-size: 22px;
+  }
+
+  .back-btn {
+    font-size: 15px;
+  }
 }
