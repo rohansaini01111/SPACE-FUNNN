@@ -89,17 +89,44 @@ function updateGame() {
 // ===============================
 // 🚀 SHIP UPDATE
 // ===============================
-function updateShip() {
-  ship.angle += 0.03;
+function drawShip() {
+  ctx.save();
 
-  let target = orbits[currentOrbitIndex];
-  ship.orbitRadius += (target - ship.orbitRadius) * 0.1;
+  ctx.translate(ship.x, ship.y);
+  ctx.rotate(ship.angle + Math.PI / 2);
 
-  ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
-  ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
+  // 🔥 glow
+  ctx.shadowColor = "#00f0ff";
+  ctx.shadowBlur = 25;
 
-  trail.push({ x: ship.x, y: ship.y });
-  if (trail.length > 20) trail.shift();
+  // 🚀 BODY
+  ctx.beginPath();
+  ctx.moveTo(0, -14);
+  ctx.lineTo(10, 10);
+  ctx.lineTo(0, 6);
+  ctx.lineTo(-10, 10);
+  ctx.closePath();
+
+  ctx.fillStyle = "#00f0ff";
+  ctx.fill();
+
+  // 🧠 cockpit
+  ctx.beginPath();
+  ctx.arc(0, -4, 3, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+
+  // 🔥 ENGINE FLAME
+  ctx.beginPath();
+  ctx.moveTo(0, 10);
+  ctx.lineTo(4, 22);
+  ctx.lineTo(-4, 22);
+  ctx.closePath();
+
+  ctx.fillStyle = Math.random() > 0.5 ? "orange" : "yellow";
+  ctx.fill();
+
+  ctx.restore();
 }
 
 // ===============================
@@ -115,6 +142,8 @@ function drawGame() {
 
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.shadowColor = "#00f0ff";
+  ctx.shadowBlur = 10;
 
   drawPlanet();
   drawOrbit();
@@ -246,6 +275,8 @@ function drawAsteroids() {
   asteroids.forEach(ast => {
     ctx.beginPath();
     ctx.arc(ast.x, ast.y, ast.radius, 0, Math.PI * 2);
+    ctx.shadowColor = "#aaa";
+     ctx.shadowBlur = 10;
     ctx.fill();
   });
 }
@@ -254,12 +285,14 @@ function drawAsteroids() {
 // 💥 PARTICLES
 // ===============================
 function createExplosion(x, y) {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     particles.push({
-      x, y,
-      vx: (Math.random() - 0.5) * 5,
-      vy: (Math.random() - 0.5) * 5,
-      life: 30
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 7,
+      vy: (Math.random() - 0.5) * 7,
+      life: 40,
+      size: Math.random() * 3 + 2
     });
   }
 }
@@ -267,8 +300,13 @@ function createExplosion(x, y) {
 function drawParticles() {
   particles.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-    ctx.fillStyle = "orange";
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+
+    ctx.fillStyle = `rgba(255,150,0,${p.life / 40})`;
+
+    ctx.shadowColor = "orange";
+    ctx.shadowBlur = 15;
+
     ctx.fill();
   });
 }
@@ -317,13 +355,37 @@ function restartGame() {
 // ===============================
 // 🎮 INPUT
 // ===============================
-canvas.addEventListener("click", () => {
-  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
-});
+let lastTap = 0;
 
+// 📱 MOBILE TAP (fixed)
 canvas.addEventListener("touchstart", () => {
+  let now = Date.now();
+
+  if (now - lastTap < 200) return; // 🔥 double trigger block
+
+  lastTap = now;
+
   currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
 });
 
+// 💻 DESKTOP CLICK
+canvas.addEventListener("mousedown", () => {
+  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+});
 // ===============================
 gameLoop();
+
+document.addEventListener("keydown", (e) => {
+
+  // 🔢 number key
+  let num = parseInt(e.key);
+  if (num >= 1 && num <= orbits.length) {
+    currentOrbitIndex = num - 1;
+  }
+
+  // ⌨️ space key
+  if (e.code === "Space") {
+    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+  }
+
+});
