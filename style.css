@@ -167,3 +167,7 @@ canvas {
 #scoreUI {
   animation: pulseGlow 2s infinite;
 }
+
+canvas {
+  touch-action: none;
+}
