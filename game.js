@@ -272,7 +272,7 @@ window.restartGame = function() {
   let popup = document.getElementById("crashPopup");
 
 if (popup) {
-  popup.classList.add("hidden");
+ popup.style.display = "none";
 }
 
   // 🔥 restart loop safely
@@ -283,9 +283,12 @@ function handleCrash() {
   createExplosion(ship.x, ship.y);
   shake = 10;
 
-  gameRunning = false; // 🔥 STOP LOOP
+  gameRunning = false;
 
-  document.getElementById("crashPopup").classList.remove("hidden");
+  let popup = document.getElementById("crashPopup");
+  if (popup) {
+    popup.style.display = "flex"; // 🔥 वापस दिखाने के लिए
+  }
 }
 // ================== START ==================
 gameLoop();
