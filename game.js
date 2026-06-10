@@ -24,7 +24,7 @@ let ship = {
 let asteroids = [];
 let particles = [];
 let shake = 0;
-
+let trail = [];
 
 // ===============================
 // 🚀 GAME LOOP
@@ -61,15 +61,25 @@ function updateGame() {
 }
 
 function updateShip() {
+  // 🔄 rotation
   ship.angle += 0.03;
 
-  let target = orbits[currentOrbitIndex];
+  // 🎯 target orbit
+  let targetRadius = orbits[currentOrbitIndex];
 
-  // 🔥 smooth orbit switching
-  ship.orbitRadius += (target - ship.orbitRadius) * 0.1;
+  // 🔥 smooth orbit transition
+  ship.orbitRadius += (targetRadius - ship.orbitRadius) * 0.1;
 
+  // 📍 position update (circular motion)
   ship.x = canvas.width / 2 + Math.cos(ship.angle) * ship.orbitRadius;
   ship.y = canvas.height / 2 + Math.sin(ship.angle) * ship.orbitRadius;
+
+  // ✨ TRAIL SYSTEM (optional but recommended)
+  trail.push({ x: ship.x, y: ship.y });
+
+  if (trail.length > 20) {
+    trail.shift();
+  }
 }
 
 // ===============================
@@ -380,4 +390,16 @@ function drawParticles() {
     ctx.fillStyle = "orange";
     ctx.fill();
   });
+}
+
+function drawTrail() {
+  for (let i = 0; i < trail.length; i++) {
+    let t = trail[i];
+
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, 2, 0, Math.PI * 2);
+
+    ctx.fillStyle = "rgba(0, 240, 255, " + (i / trail.length) + ")";
+    ctx.fill();
+  }
 }
