@@ -76,6 +76,10 @@ function updateGame() {
   }
 });
 }
+// 🔥 particle limit
+if (particles.length > 100) {
+  particles.splice(0, 20);
+}
 
 function updateShip() {
   // 🔄 rotation
