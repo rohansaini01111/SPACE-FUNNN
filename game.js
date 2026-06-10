@@ -355,23 +355,37 @@ function restartGame() {
 // ===============================
 // 🎮 INPUT
 // ===============================
-let lastTap = 0;
+// ===============================
+// 🎮 INPUT (FINAL FIXED)
+// ===============================
 
-// 📱 MOBILE TAP (fixed)
-canvas.addEventListener("touchstart", () => {
-  let now = Date.now();
+let isTouchDevice = "ontouchstart" in window;
 
-  if (now - lastTap < 200) return; // 🔥 double trigger block
+// 📱 MOBILE
+if (isTouchDevice) {
 
-  lastTap = now;
+  let lastTap = 0;
 
-  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
-});
+  canvas.addEventListener("touchstart", (e) => {
+    e.preventDefault(); // 🔥 VERY IMPORTANT
 
-// 💻 DESKTOP CLICK
-canvas.addEventListener("mousedown", () => {
-  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
-});
+    let now = Date.now();
+
+    if (now - lastTap < 150) return;
+
+    lastTap = now;
+
+    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+  });
+
+} else {
+
+  // 💻 DESKTOP
+  canvas.addEventListener("mousedown", () => {
+    currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+  });
+
+}
 // ===============================
 gameLoop();
 
