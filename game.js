@@ -23,6 +23,7 @@ let ship = {
 
 let asteroids = [];
 let particles = [];
+let shake = 0;
 
 
 // ===============================
@@ -75,17 +76,28 @@ function updateShip() {
 // 🎨 DRAW
 // ===============================
 function drawGame() {
+  ctx.save();
+
+  if (shake > 0) {
+    ctx.translate(
+      Math.random() * shake - shake / 2,
+      Math.random() * shake - shake / 2
+    );
+    shake--;
+  }
+
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawPlanet();
   drawOrbit();
+  drawTrail();
   drawShip();
   drawAsteroids();
-  drawScore();
   drawParticles();
-}
 
+  ctx.restore();
+}
 
 // ===============================
 // 🪐 PLANET + ORBITS
@@ -295,13 +307,15 @@ function checkCollisions() {
 // 💀 CRASH
 // ===============================
 function handleCrash() {
+  createExplosion(ship.x, ship.y); // 💥 explosion
+
   gameRunning = false;
 
   document.getElementById("crashPopup").classList.remove("hidden");
   document.getElementById("finalScore").innerText = "Score: " + score;
-  createExplosion(ship.x, ship.y);
-}
 
+  shake = 10;
+}
 
 // ===============================
 // 🔁 RESTART
