@@ -42,8 +42,11 @@ window.addEventListener("resize", resizeCanvas);
 
 // ================== LOOP ==================
 function gameLoop() {
+   if (!gameRunning) return;
+  
   update();
   draw();
+  
   requestAnimationFrame(gameLoop);
 }
 
@@ -242,6 +245,41 @@ function drawAsteroids() {
 
     ctx.fill();
   });
+}
+
+function restartGame() {
+
+  // 🔥 reset core state
+  score = 0;
+  asteroids = [];
+  particles = [];
+  trail = [];
+
+  // 🔥 reset ship
+  ship.angle = 0;
+  ship.orbitRadius = orbits[currentOrbitIndex];
+
+  // 🔥 reset system
+  spawnTimer = 0;
+  shake = 0;
+  switchBoost = 0;
+
+  gameRunning = true;
+
+  // 🔥 hide popup
+  document.getElementById("crashPopup").classList.add("hidden");
+
+  // 🔥 restart loop safely
+  requestAnimationFrame(gameLoop);
+}
+
+function handleCrash() {
+  createExplosion(ship.x, ship.y);
+  shake = 10;
+
+  gameRunning = false; // 🔥 STOP LOOP
+
+  document.getElementById("crashPopup").classList.remove("hidden");
 }
 // ================== START ==================
 gameLoop();
