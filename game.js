@@ -8,7 +8,6 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // 🔥 responsive orbits
   let base = Math.min(canvas.width, canvas.height) / 4;
 
   orbits = [
@@ -17,11 +16,13 @@ function resizeCanvas() {
     base * 1.1,
     base * 1.4
   ];
+
+  // 💥 CRITICAL FIX
+  ship.orbitRadius = orbits[currentOrbitIndex];
 }
 
 // पहली बार call
 resizeCanvas();
-
 // mobile rotate / resize
 window.addEventListener("resize", resizeCanvas);
 let gameRunning = true;
