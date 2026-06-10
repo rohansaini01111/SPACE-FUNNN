@@ -1,6 +1,8 @@
 let canvas = document.getElementById("gameCanvas");
 let ctx = canvas.getContext("2d");
 
+let gameRunning = true;
+
 let score = 0;
 let highScore = localStorage.getItem("highScore") || 0;
 
