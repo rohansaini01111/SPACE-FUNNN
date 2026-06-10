@@ -247,7 +247,7 @@ function drawAsteroids() {
   });
 }
 
-function restartGame() {
+window.restartGame = function() {
 
   // 🔥 reset core state
   score = 0;
