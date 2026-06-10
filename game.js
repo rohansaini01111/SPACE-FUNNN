@@ -56,15 +56,15 @@ function gameLoop() {
 function update() {
  // 🚀 ORBIT SPEED SYSTEM (FINAL FIX)
 
-let baseSpeed = 0.007;
+let baseSpeed = 0.008;
 
 let orbitSpeedFactor = [
   1.0,
-  1.2,
-  1.4,
-  1.7
+  1.25,
+  1.5,
+  1.8
 ];
-
+  
 let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
 
 // 🔥 ensure variable exists
