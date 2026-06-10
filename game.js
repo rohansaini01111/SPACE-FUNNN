@@ -73,7 +73,7 @@ if (!ship.currentSpeed) {
 }
 
 // smooth transition
-ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.05;
+ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.10;
 
 // 💣 THIS LINE IS THE MOST IMPORTANT
 ship.angle += ship.currentSpeed;
