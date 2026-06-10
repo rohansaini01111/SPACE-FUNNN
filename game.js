@@ -16,12 +16,24 @@ let switchBoost = 0;
 
 // ================== RESPONSIVE ==================
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const dpr = window.devicePixelRatio || 1;
 
-  let base = Math.min(canvas.width, canvas.height) / 4;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
 
-  orbits = [base*0.5, base*0.8, base*1.1, base*1.4];
+  canvas.style.width = window.innerWidth + "px";
+  canvas.style.height = window.innerHeight + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  let base = Math.min(window.innerWidth, window.innerHeight) / 4;
+
+  orbits = [
+    base * 0.5,
+    base * 0.8,
+    base * 1.1,
+    base * 1.4
+  ];
 
   ship.orbitRadius = orbits[currentOrbitIndex];
 }
@@ -47,6 +59,8 @@ function update() {
 
   switchBoost *= 0.9;
 
+    updateAsteroids();
+
   particles.forEach((p,i)=>{
     p.x+=p.vx;
     p.y+=p.vy;
@@ -56,6 +70,7 @@ function update() {
 
   document.getElementById("scoreUI").innerText =
     `Score: ${score} | High: ${highScore}`;
+  
 }
 
 // ================== DRAW ==================
@@ -74,6 +89,8 @@ function draw() {
   drawOrbits();
   drawShip();
   drawParticles();
+  drawAsteroids();
+  
 
   ctx.restore();
 }
@@ -175,5 +192,56 @@ document.addEventListener("keydown",(e)=>{
   }
 });
 
+  let spawnTimer = 0;
+
+function spawnAsteroid() {
+  let side = Math.floor(Math.random() * 4);
+
+  let x, y;
+
+  if (side === 0) { x = 0; y = Math.random() * canvas.height; }
+  if (side === 1) { x = canvas.width; y = Math.random() * canvas.height; }
+  if (side === 2) { x = Math.random() * canvas.width; y = 0; }
+  if (side === 3) { x = Math.random() * canvas.width; y = canvas.height; }
+
+  let angle = Math.atan2(canvas.height/2 - y, canvas.width/2 - x);
+
+  asteroids.push({
+    x,
+    y,
+    radius: 10 + Math.random()*10,
+    vx: Math.cos(angle),
+    vy: Math.sin(angle),
+    speed: 2
+  });
+}
+
+function updateAsteroids() {
+  spawnTimer++;
+
+  if (spawnTimer > 60) {
+    spawnAsteroid();
+    spawnTimer = 0;
+  }
+
+  asteroids.forEach((ast, i) => {
+    ast.x += ast.vx * ast.speed;
+    ast.y += ast.vy * ast.speed;
+  });
+}
+
+function drawAsteroids() {
+  ctx.fillStyle = "#aaa";
+
+  asteroids.forEach(ast => {
+    ctx.beginPath();
+    ctx.arc(ast.x, ast.y, ast.radius, 0, Math.PI * 2);
+
+    ctx.shadowColor = "#aaa";
+    ctx.shadowBlur = 10;
+
+    ctx.fill();
+  });
+}
 // ================== START ==================
 gameLoop();
