@@ -22,6 +22,7 @@ let ship = {
 };
 
 let asteroids = [];
+let particles = [];
 
 
 // ===============================
@@ -46,6 +47,16 @@ function updateGame() {
   checkCollisions();
 
    document.getElementById("scoreUI").innerText = "Score: " + score;
+
+  particles.forEach((p, i) => {
+  p.x += p.vx;
+  p.y += p.vy;
+  p.life--;
+
+  if (p.life <= 0) {
+    particles.splice(i, 1);
+  }
+});
 }
 
 function updateShip() {
@@ -72,6 +83,7 @@ function drawGame() {
   drawShip();
   drawAsteroids();
   drawScore();
+  drawParticles();
 }
 
 
@@ -198,6 +210,18 @@ function spawnAsteroid() {
 
 let spawnTimer = 0;
 
+function createExplosion(x, y) {
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 5,
+      vy: (Math.random() - 0.5) * 5,
+      life: 30
+    });
+  }
+}
+
 function updateAsteroids() {
   spawnTimer++;
 
@@ -275,6 +299,7 @@ function handleCrash() {
 
   document.getElementById("crashPopup").classList.remove("hidden");
   document.getElementById("finalScore").innerText = "Score: " + score;
+  createExplosion(ship.x, ship.y);
 }
 
 
@@ -332,4 +357,13 @@ function drawScore() {
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText("Score: " + score, 20, 30);
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = "orange";
+    ctx.fill();
+  });
 }
