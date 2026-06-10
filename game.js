@@ -147,6 +147,7 @@ function drawGame() {
 
   drawPlanet();
   drawOrbit();
+  drawTrail();
   drawShip();
   drawAsteroids();
   drawParticles();
