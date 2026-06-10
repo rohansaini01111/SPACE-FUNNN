@@ -269,7 +269,11 @@ window.restartGame = function() {
   gameRunning = true;
 
   // 🔥 hide popup
-  document.getElementById("crashPopup").classList.add("hidden");
+  let popup = document.getElementById("crashPopup");
+
+if (popup) {
+  popup.classList.add("hidden");
+}
 
   // 🔥 restart loop safely
   requestAnimationFrame(gameLoop);
