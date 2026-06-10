@@ -4,9 +4,26 @@
 let canvas = document.getElementById("gameCanvas");
 let ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
+  // 🔥 responsive orbits
+  let base = Math.min(canvas.width, canvas.height) / 4;
+
+  orbits = [
+    base * 0.5,
+    base * 0.8,
+    base * 1.1,
+    base * 1.4
+  ];
+}
+
+// पहली बार call
+resizeCanvas();
+
+// mobile rotate / resize
+window.addEventListener("resize", resizeCanvas);
 let gameRunning = true;
 let score = 0;
 
@@ -376,6 +393,16 @@ document.addEventListener("keydown", (e) => {
     currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
   }
 
+});
+
+// 🖱️ Desktop click
+canvas.addEventListener("click", () => {
+  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
+});
+
+// 📱 Mobile tap
+canvas.addEventListener("touchstart", () => {
+  currentOrbitIndex = (currentOrbitIndex + 1) % orbits.length;
 });
 
 gameLoop();
