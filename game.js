@@ -9,7 +9,13 @@ let highScore = localStorage.getItem("highScore") || 0;
 let orbits = [];
 let currentOrbitIndex = 1;
 
-let ship = { x: 0, y: 0, angle: 0, orbitRadius: 0 };
+let ship = {
+  x: 0,
+  y: 0,
+  angle: 0,
+  orbitRadius: 0,
+  radius: 8 // 💣 YAHI ADD KARNA HAI
+};
 
 let particles = [];
 let asteroids = [];
@@ -54,39 +60,28 @@ function gameLoop() {
 
 // ================== UPDATE ==================
 function update() {
- // 🚀 ORBIT SPEED SYSTEM (FINAL FIX)
 
-let baseSpeed = 0.008;
- let orbitSpeedFactor = [
-  1.5,
-  1.7,
-  1.9,
-  2
-];
-  
-let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
+  // ship movement
+  let baseSpeed = 0.007;
+  let orbitSpeedFactor = [1.2, 1.35, 1.5, 1.8];
 
-// 🔥 ensure variable exists
-if (!ship.currentSpeed) {
-  ship.currentSpeed = targetSpeed;
-}
+  let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
 
-// smooth transition
-ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.10;
+  if (!ship.currentSpeed) {
+    ship.currentSpeed = targetSpeed;
+  }
 
-// 💣 THIS LINE IS THE MOST IMPORTANT
-ship.angle += ship.currentSpeed;
-
-  let target = orbits[currentOrbitIndex];
-  ship.orbitRadius += (target - ship.orbitRadius) * (0.1 + switchBoost);
+  ship.currentSpeed += (targetSpeed - ship.currentSpeed) * 0.05;
+  ship.angle += ship.currentSpeed;
 
   ship.x = canvas.width/2 + Math.cos(ship.angle)*ship.orbitRadius;
   ship.y = canvas.height/2 + Math.sin(ship.angle)*ship.orbitRadius;
 
-  switchBoost *= 0.9;
+  // 💥 ADD THIS
+  updateAsteroids();
+  checkCollisions();
 
-    updateAsteroids();
-
+  // particles
   particles.forEach((p,i)=>{
     p.x+=p.vx;
     p.y+=p.vy;
@@ -96,7 +91,6 @@ ship.angle += ship.currentSpeed;
 
   document.getElementById("scoreUI").innerText =
     `Score: ${score} | High: ${highScore}`;
-  
 }
 
 // ================== DRAW ==================
@@ -270,6 +264,44 @@ function drawAsteroids() {
   });
 }
 
+    // ===============================
+// 💀 COLLISION SYSTEM (YAHI ADD KARNA HAI)
+// ===============================
+function checkCollisions() {
+
+  asteroids.forEach((ast, i) => {
+
+    let dx = ship.x - ast.x;
+    let dy = ship.y - ast.y;
+
+    let distance = Math.sqrt(dx*dx + dy*dy);
+
+    // 💀 CRASH
+    if (distance < ship.radius + ast.radius) {
+      handleCrash();
+    }
+
+    // 🎯 SCORE (planet reach)
+    let dx2 = ast.x - canvas.width/2;
+    let dy2 = ast.y - canvas.height/2;
+
+    let distToCenter = Math.sqrt(dx2*dx2 + dy2*dy2);
+
+    if (distToCenter < 40) {
+      asteroids.splice(i, 1);
+
+      score++;
+
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("highScore", highScore);
+      }
+    }
+
+  });
+
+}
+
 function restartGame() {
 
   score = 0;
@@ -300,5 +332,7 @@ function handleCrash() {
     popup.style.display = "flex"; // 🔥 show again
   }
 }
+
+
 // ================== START ==================
 gameLoop();
