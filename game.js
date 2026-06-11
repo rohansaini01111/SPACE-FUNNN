@@ -57,8 +57,6 @@ function update() {
  // 🚀 ORBIT SPEED SYSTEM (FINAL FIX)
 
 let baseSpeed = 0.008;
-
-let orbitSpeedFactor = [
  let orbitSpeedFactor = [
   1.4,
   1.55,
