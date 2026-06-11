@@ -58,10 +58,10 @@ function update() {
 
 let baseSpeed = 0.008;
  let orbitSpeedFactor = [
-  1.4,
-  1.55,
-  1.85,
-  1.95
+  1.5,
+  1.7,
+  1.9,
+  2
 ];
   
 let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
