@@ -61,7 +61,7 @@ let baseSpeed = 0.008;
   1.4,
   1.55,
   1.85,
-  2.00,
+  1.95
 ];
   
 let targetSpeed = baseSpeed * orbitSpeedFactor[currentOrbitIndex];
